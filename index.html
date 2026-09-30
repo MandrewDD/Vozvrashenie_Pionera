@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>Виртуальные туры</title>
+
+  <style>
+    body {
+      font-family: "Segoe UI", Tahoma, sans-serif;
+      background-color: #121212;
+      color: #e0e0e0;
+      margin: 0;
+      padding: 2rem;
+    }
+
+    h1 {
+      text-align: center;
+      color: #ffffff;
+      margin-bottom: 2rem;
+    }
+
+    #tour-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .tour-card {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border-radius: 14px;
+      overflow: hidden;
+      text-decoration: none;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 500;
+      font-size: 1.05rem;
+      background-size: cover;
+      background-position: center;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+      transition: transform 0.2s ease;
+    }
+
+    .tour-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      transition: 0.25s ease;
+      z-index: 1;
+    }
+
+    .tour-card:hover {
+      transform: translateY(-4px);
+    }
+
+    .tour-card:hover::before {
+      background: rgba(0,0,0,0.15);
+    }
+
+    .tour-card span {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+    }
+
+    @media (max-width: 1200px) {
+      #tour-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    @media (max-width: 800px) {
+      #tour-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 500px) {
+      #tour-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+
+<body>
+  <h1>🗺️ Виртуальные туры</h1>
+  <div id="tour-grid"></div>
+
+  <script>
+    const owner = "MandrewDD";
+    const repo = "Vozvrashenie_Pionera";
+
+    const grid = document.getElementById("tour-grid");
+
+    async function getPreview(folder) {
+      try {
+        const url = `https://api.github.com/repos/${owner}/${repo}/contents/Tours/${folder}/output/images`;
+        const res = await fetch(url);
+        const data = await res.json();
+
+        if (!Array.isArray(data)) return null;
+
+        const preview = data.find(f =>
+          f.name.toLowerCase().includes("preview") &&
+          /\.(jpg|jpeg|png|webp)$/i.test(f.name)
+        );
+
+        return preview ? preview.download_url : null;
+
+      } catch (e) {
+        return null;
+      }
+    }
+
+    async function loadTours() {
+      try {
+        const url = `https://api.github.com/repos/${owner}/${repo}/contents/Tours`;
+        const res = await fetch(url);
+        const data = await res.json();
+
+        if (!Array.isArray(data)) {
+          throw new Error("GitHub API error");
+        }
+
+        const folders = data.filter(item => item.type === "dir");
+
+        // ⚡ ПАРАЛЛЕЛЬНАЯ ЗАГРУЗКА ПРЕВЬЮ
+        const results = await Promise.all(
+          folders.map(async (folder) => {
+            const img = await getPreview(folder.name);
+            return { folder, img };
+          })
+        );
+
+        // Рендер без ожиданий
+        results.forEach(({ folder, img }) => {
+          const a = document.createElement("a");
+          a.className = "tour-card";
+          a.href = `Tours/${folder.name}/output/index.html`;
+
+          if (img) {
+            a.style.backgroundImage = `url(${img})`;
+          } else {
+            a.style.background = "#1e1e1e";
+          }
+
+          const span = document.createElement("span");
+          span.textContent = folder.name.replace(/_/g, " ");
+
+          a.appendChild(span);
+          grid.appendChild(a);
+        });
+
+      } catch (e) {
+        console.error(e);
+        grid.innerHTML = "<div>Ошибка загрузки данных</div>";
+      }
+    }
+
+    loadTours();
+  </script>
+</body>
+</html>
