@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <!-- Pano2VR project file  -->
-<pano2vrconfig rev="15996" version="5.2.4">
+<pano2vrconfig version="5.2.4" rev="15996">
   <tour>
     <panorama>
       <id>node1</id>
@@ -65,6 +65,7 @@
       <streetview/>
       <streetviewproject/>
       <sounds/>
+      <output/>
     </panorama>
     <panorama>
       <input>
@@ -309,6 +310,25 @@
           <linktype>node</linktype>
           <linksubtype>unknown</linksubtype>
           <url>{node18}</url>
+          <autoplace>0</autoplace>
+        </hotspot>
+        <hotspot>
+          <position>
+            <pan>-179.49</pan>
+            <tilt>-10.24</tilt>
+          </position>
+          <next>
+            <pan>0</pan>
+            <tilt>0</tilt>
+            <fov>0</fov>
+          </next>
+          <polygon/>
+          <type>point</type>
+          <id>Point03</id>
+          <title>$ut</title>
+          <linktype>node</linktype>
+          <linksubtype>unknown</linksubtype>
+          <url>{node3}</url>
           <autoplace>0</autoplace>
         </hotspot>
       </hotspots>
@@ -1276,7 +1296,7 @@
           <enabled>1</enabled>
           <filename>output/index.html</filename>
           <values>
-            <value id="css"></value>
+            <value id="css"/>
             <value id="gginfo">false</value>
             <value id="gyro">false</value>
             <value id="gyrodisable">false</value>
@@ -1285,7 +1305,7 @@
             <value id="gyrosmooth">true</value>
             <value id="jsxml">false</value>
             <value id="parseanchor">false</value>
-            <value id="swf"></value>
+            <value id="swf"/>
             <value id="swffirst">false</value>
             <value id="swfgeneric">false</value>
           </values>
