@@ -797,6 +797,25 @@
           <url>{node11}</url>
           <autoplace>0</autoplace>
         </hotspot>
+        <hotspot>
+          <position>
+            <pan>-5.49</pan>
+            <tilt>-21.12</tilt>
+          </position>
+          <next>
+            <pan>0</pan>
+            <tilt>0</tilt>
+            <fov>0</fov>
+          </next>
+          <polygon/>
+          <type>point</type>
+          <id>Point03</id>
+          <title>$ut</title>
+          <linktype>node</linktype>
+          <linksubtype>unknown</linksubtype>
+          <url>{node16}</url>
+          <autoplace>0</autoplace>
+        </hotspot>
       </hotspots>
       <output/>
       <streetview/>
